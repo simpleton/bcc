@@ -50,3 +50,31 @@ cc_library_headers {
         "src/cc/",
     ],
 }
+
+cc_library_static {
+    name: "libbccbpf",
+    defaults: ["libbccbpf_defaults"],
+    srcs: [
+        "src/cc/*.c",
+        "src/cc/*.cc",
+    ],
+    exclude_srcs: [
+        "src/cc/bpf_module_rw_engine_disabled.cc",
+    ],
+    whole_static_libs: [
+        "libbccbpf_api",
+        "libbccbpf_frontends_b",
+        "libbccbpf_frontends_clang",
+        "libbccbpf_usdt",
+    ],
+    static_libs: [
+        "libbpf_bpftrace",
+        "libclang8",
+        "libelf",
+        "libllvm8",
+    ],
+    shared_libs: [
+        "libz",
+    ],
+    export_header_lib_headers: ["libbccbpf_headers"],
+}
