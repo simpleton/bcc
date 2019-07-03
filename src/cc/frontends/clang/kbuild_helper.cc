@@ -153,6 +153,13 @@ static inline int extract_kheaders(const std::string &dirpath,
   char tar_cmd[256], dirpath_tmp[256];
   int ret;
   bool module = false;
+  const char *tmpdir = getenv("TMPDIR");
+  string tmpdir_str;
+
+  if (tmpdir)
+    tmpdir_str = string(tmpdir);
+  else
+    tmpdir_str = string("/tmp");
 
   if (!proc_kheaders_exists()) {
     ret = system("modprobe kheaders");
@@ -165,7 +172,8 @@ static inline int extract_kheaders(const std::string &dirpath,
     }
   }
 
-  snprintf(dirpath_tmp, sizeof(dirpath_tmp), "/tmp/kheaders-%s-XXXXXX", uname_data.release);
+  snprintf(dirpath_tmp, sizeof(dirpath_tmp),
+           (tmpdir_str + "/kheaders-%s-XXXXXX").c_str(), uname_data.release);
   if (mkdtemp(dirpath_tmp) == NULL) {
     ret = -1;
     goto cleanup;
@@ -202,15 +210,19 @@ cleanup:
 int get_proc_kheaders(std::string &dirpath)
 {
   struct utsname uname_data;
-  char dirpath_tmp[256];
+  const char *tmpdir = getenv("TMPDIR");
+  string tmpdir_str;
+
+  if (tmpdir)
+    tmpdir_str = string(tmpdir);
+  else
+    tmpdir_str = string("/tmp");
 
   if (uname(&uname_data))
     return -errno;
 
-  snprintf(dirpath_tmp, 256, "/tmp/kheaders-%s", uname_data.release);
-  dirpath = std::string(dirpath_tmp);
-
-  if (file_exists(dirpath_tmp))
+  dirpath = (tmpdir_str + "/kheaders") + uname_data.release;
+  if (file_exists(dirpath.c_str()))
     return 0;
 
   // First time so extract it
