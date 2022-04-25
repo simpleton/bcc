@@ -19,6 +19,9 @@ cc_library_static {
     srcs: ["*.cc"],
     export_include_dirs: ["."],
     defaults: ["libbccbpf_defaults"],
+    header_libs: [
+        "libbpf_headers_for_bcc",
+    ],
     static_libs: [
         "libclang8",
         "libllvm8",

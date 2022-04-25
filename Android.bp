@@ -19,17 +19,24 @@ cc_defaults {
     cpp_std: "c++11",
     cflags: [
        "-Wno-compare-distinct-pointer-types",
+       "-Wno-constant-conversion",
        "-Wno-extern-c-compat",
        "-Wno-implicit-fallthrough",
        "-Wno-missing-field-initializers",
        "-Wno-non-virtual-dtor",
        "-Wno-unused-parameter",
+       "-Wno-deprecated-declarations",
+       "-Wno-unused-private-field",
+       "-Wno-typedef-redefinition",
+       "-Wno-format",
+       "-Wno-return-stack-address",
 
        // BCC will try to look for kernel headers here if BCC_KERNEL_SOURCE
        // env variable is not defined
        "-DKERNEL_MODULES_DIR=\"/data/local/tmp/modules\"",
        "-DBCC_PROG_TAG_DIR=\"/data/local/tmp/bpf\"",
        "-DLLVM_MAJOR_VERSION=8",
+       "-DHAVE_EXTERNAL_LIBBPF",
 
         // linux/compiler.h from libbpf collides with with the one provided by
         // bionic. Bionic version defines two macros and we need one of them,
