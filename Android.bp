@@ -70,7 +70,6 @@ cc_library_static {
     ],
     whole_static_libs: [
         "libbccbpf_api",
-        "libbccbpf_frontends_b",
         "libbccbpf_frontends_clang",
         "libbccbpf_usdt",
     ],
