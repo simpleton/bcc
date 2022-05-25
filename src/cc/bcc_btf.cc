@@ -22,6 +22,7 @@
 #include "bcc_libbpf_inc.h"
 #include <vector>
 #include <byteswap.h>
+#include <errno.h>
 
 #define BCC_MAX_ERRNO       4095
 #define BCC_IS_ERR_VALUE(x) ((x) >= (unsigned long)-BCC_MAX_ERRNO)
