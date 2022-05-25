@@ -55,6 +55,7 @@ cc_library_headers {
     name: "libbccbpf_headers",
     export_include_dirs: [
         "src/cc/",
+        "src/cc/frontends/clang/",
     ],
 }
 
