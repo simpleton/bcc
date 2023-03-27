@@ -122,11 +122,12 @@ class MyMemoryManager : public SectionMemoryManager {
       if (!section)
         continue;
 
-      auto sec_name = section.get()->getName();
-      if (!sec_name)
+      StringRef sec_name;
+      auto ret = section.get()->getName(sec_name);
+      if (!ret)
         continue;
 
-      info->section_ = sec_name->str();
+      info->section_ = sec_name.str();
       info->size_ = ss.second;
     }
   }
