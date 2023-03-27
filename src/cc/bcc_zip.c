@@ -153,7 +153,7 @@ static void* check_access(struct bcc_zip_archive* archive, uint32_t offset,
   if (offset + size > archive->size || offset > offset + size) {
     return NULL;
   }
-  return archive->data + offset;
+  return ((char*)archive->data) + offset;
 }
 
 // Returns 0 on success, -1 on error and -2 if the eocd indicates
@@ -341,7 +341,7 @@ int bcc_zip_archive_find_entry(struct bcc_zip_archive* archive,
     if ((cdfh_flags & FLAG_ENCRYPTED) == 0 &&
         (cdfh_flags & FLAG_HAS_DATA_DESCRIPTOR) == 0 &&
         file_name_length == cdfh_name_length &&
-        memcmp(file_name, archive->data + offset, file_name_length) == 0) {
+        memcmp(file_name, ((char*)archive->data) + offset, file_name_length) == 0) {
       return get_entry_at_offset(archive, unaligned_uint32_read(cdfh->offset),
                                  out);
     }
@@ -374,8 +374,9 @@ int bcc_zip_archive_find_entry_at_offset(struct bcc_zip_archive* archive,
         return -1;
       }
 
-      if (out->data <= archive->data + target &&
-          archive->data + target < out->data + out->data_length) {
+      if (out->data <= ((char*)archive->data) + target &&
+          ((char*)archive->data) + target <
+              ((char*)out->data) + out->data_length) {
         return 0;
       }
     }
